@@ -1,0 +1,20 @@
+import { applyDecorators, Controller } from "@nestjs/common"
+import { Auth } from "./auth.decorators"
+
+/**
+ * It takes a name and a boolean value and returns a decorator that applies the Controller, ApiTags,
+ * and Auth decorators to the class
+ * @param name - The name of the controller.
+ * @param secured - whether or not the controller should be secured
+ * @returns A function that takes in a class and returns a class.
+ */
+export function GenericController(name: string, secured = true) {
+  const decsToApply: (ClassDecorator | MethodDecorator | PropertyDecorator)[] = [
+    Controller(name),
+  ]
+
+  if (secured)
+    decsToApply.push(Auth())
+
+  return applyDecorators(...decsToApply)
+}

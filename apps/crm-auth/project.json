@@ -39,6 +39,34 @@
       "options": {
         "passWithNoTests": true
       }
+    },
+     "prisma": {
+      "command": "prisma",
+      "options": {
+        "cwd": "apps/crm-auth"
+      }
+    },
+    "migrate": {
+      "command": "prisma migrate dev",
+      "options": {
+        "cwd": "apps/crm-auth"
+      }
+    },
+    "generate-types": {
+      "command": "prisma generate",
+      "options": {
+        "cwd": "apps/crm-auth"
+      }
+    },
+    "prisma-db-seed": {
+      "executor": "nx:run-commands",
+      "options": {
+        "command": "npx prisma db seed",
+        "cwd": "apps/crm-auth"
+      }
     }
+  },
+  "prisma": {
+    "seed": "ts-node --compiler-options {\"module\":\"CommonJS\"} prisma/seed.ts"
   }
 }

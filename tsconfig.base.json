@@ -14,7 +14,11 @@
     "skipLibCheck": true,
     "skipDefaultLibCheck": true,
     "baseUrl": ".",
-    "paths": {}
+    "paths": {
+      "@my-workspace/common": ["libs/common/src/index.ts"],
+      "@my-workspace/octo-casl": ["octo-casl/src/index.ts"],
+      "@octo/casl": ["octo-casl/src/index.ts"]
+    }
   },
   "exclude": ["node_modules", "tmp"]
 }

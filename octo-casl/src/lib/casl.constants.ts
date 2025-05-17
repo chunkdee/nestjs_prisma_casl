@@ -1,0 +1,3 @@
+export const PRISMA_CLIENT = 'PRISMA_CLIENT';
+export const ABILITY_TOKEN = 'ABILITY_TOKEN';
+export const CLS_SERVICE = 'CLS_SERVICE';

@@ -1,0 +1,160 @@
+generator client {
+  provider = "prisma-client-js"
+  output = "../src/generated/client"
+}
+
+datasource db {
+  provider = "postgresql"
+  url      = env("DATABASE_URL")
+}
+
+model User {
+  id        Int      @id @default(autoincrement())
+  email     String   @unique
+  password  String
+  firstName String?
+  lastName  String?
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+  contacts  Contact[]
+  companies Company[]
+  tasks     Task[]
+  activities Activity[]
+  roleId    Int
+  role      Role     @relation(fields: [roleId], references: [id])
+
+  @@map("users")
+}
+
+model Role {
+  id          Int      @id @default(autoincrement())
+  name        String   @unique
+  permissions Permission[]
+  users       User[]
+
+  @@map("roles")
+}
+
+model Permission {
+  id        Int      @id @default(autoincrement())
+  action    String   // e.g., "read", "update", "delete", or ["read", "update"]
+  subject   String?  // e.g., "User", "Task", or ["User", "Task"]
+  fields    String[] // Specific fields the role has access to
+  conditions Json?   // JSON object for dynamic conditions
+  inverted   Boolean @default(false) // If true, the permission is a restriction
+  reason     String? // Explanation for restricted permission
+  roleId     Int
+  role       Role    @relation(fields: [roleId], references: [id])
+
+  @@map("permissions")
+}
+
+model Contact {
+  id        Int      @id @default(autoincrement())
+  firstName String
+  lastName  String
+  email     String   @unique
+  phone     String?
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+  userId    Int
+  user      User     @relation(fields: [userId], references: [id])
+  companyId Int?
+  company   Company? @relation(fields: [companyId], references: [id])
+  notes     Note[]
+  activities Activity[]
+
+  @@map("contacts")
+}
+
+model Company {
+  id        Int      @id @default(autoincrement())
+  name      String
+  website   String?
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+  users     User[]
+  contacts  Contact[]
+  quotes    Quote[]
+  deals     Deal[]
+  invoices  Invoice[]
+
+  @@map("companies")
+}
+
+model Quote {
+  id        Int      @id @default(autoincrement())
+  amount    Float
+  status    String
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+  companyId Int
+  company   Company @relation(fields: [companyId], references: [id])
+
+  @@map("quotes")
+}
+
+model Deal {
+  id        Int      @id @default(autoincrement())
+  title     String
+  status    String
+  amount    Float
+  companyId Int
+  company   Company @relation(fields: [companyId], references: [id])
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+
+  @@map("deals")
+}
+
+model Invoice {
+  id        Int      @id @default(autoincrement())
+  amount    Float
+  status    String
+  issuedAt  DateTime
+  dueDate   DateTime
+  companyId Int
+  company   Company @relation(fields: [companyId], references: [id])
+
+  @@map("invoices")
+}
+
+model Task {
+  id          Int      @id @default(autoincrement())
+  title       String
+  description String?
+  dueDate     DateTime?
+  status      String
+  userId      Int
+  user        User     @relation(fields: [userId], references: [id])
+  createdAt   DateTime @default(now())
+  updatedAt   DateTime @updatedAt
+
+  @@map("tasks")
+}
+
+model Activity {
+  id          Int      @id @default(autoincrement())
+  type        String
+  description String?
+  date        DateTime
+  userId      Int
+  user        User     @relation(fields: [userId], references: [id])
+  contactId   Int?
+  contact     Contact? @relation(fields: [contactId], references: [id])
+  createdAt   DateTime @default(now())
+  updatedAt   DateTime @updatedAt
+
+  @@map("activities")
+}
+
+model Note {
+  id          Int      @id @default(autoincrement())
+  content     String
+  createdAt   DateTime @default(now())
+  updatedAt   DateTime @updatedAt
+  contactId   Int
+  contact     Contact @relation(fields: [contactId], references: [id])
+
+  @@map("notes")
+}
