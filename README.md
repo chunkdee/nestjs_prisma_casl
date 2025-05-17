@@ -1,82 +1,89 @@
-# MyWorkspace
+# My Workspace CRM
 
-<a alt="Nx logo" href="https://nx.dev" target="_blank" rel="noreferrer"><img src="https://raw.githubusercontent.com/nrwl/nx/master/images/nx-logo.png" width="45"></a>
+This repository is an Nx workspace for the CRM application. It leverages NestJS, Prisma, and Redis, and uses Nx 21.0.3 with npm as the package manager.
 
-✨ Your new, shiny [Nx workspace](https://nx.dev) is almost ready ✨.
+## Table of Contents
 
-[Learn more about this workspace setup and its capabilities](https://nx.dev/nx-api/nest?utm_source=nx_project&amp;utm_medium=readme&amp;utm_campaign=nx_projects) or run `npx nx graph` to visually explore what was created. Now, let's get you up to speed!
+- [Installation](#installation)
+- [Development](#development)
+- [Running Applications](#running-applications)
+- [Database & Prisma](#database--prisma)
+- [Cache & Redis](#cache--redis)
+- [Nx Workspace](#nx-workspace)
+- [Docker](#docker)
+- [License](#license)
 
-## Finish your CI setup
+## Installation
 
-[Click here to finish setting up your workspace!](https://cloud.nx.app/connect/KU5oViv1M6)
+1. **Clone the repository**
+   ```bash
+   git clone <repository-url>
+   cd my-workspace
+   ```
 
+2. **Install dependencies**
+   ```bash
+   npm install
+   ```
 
-## Run tasks
+## Development
 
-To run the dev server for your app, use:
+- **Start the development server for the CRM Auth app**
+   ```bash
+   npx nx serve crm-auth
+   ```
 
-```sh
-npx nx serve crm-auth
+- **Visualize the project graph**
+   ```bash
+   npx nx graph
+   ```
+
+## Running Applications
+
+- You can run individual projects using Nx CLI, for example:
+   ```bash
+   npx nx serve crm-auth
+   ```
+- To run multiple projects:
+   ```bash
+   npx nx run-many --target=serve
+   ```
+
+## Database & Prisma
+
+- **Database:** PostgreSQL  
+- **ORM:** Prisma  
+- **Generate Prisma Client:**
+   ```bash
+   npx prisma generate
+   ```
+- **Apply migrations:**
+   ```bash
+   npx nx run crm-auth:migrate
+   ```
+
+## Cache & Redis
+
+- **Cache Provider:** Redis is used via the CacheModule.
+- Ensure Redis is running. You can start Redis with Docker.
+
+## Nx Workspace
+
+This workspace leverages Nx’s powerful tooling to manage multiple projects, enforce best practices, and optimize build times.  
+For more information on Nx, refer to the [Nx Documentation](https://nx.dev).
+
+## Docker
+
+A `docker-compose.yml` file is provided to run the necessary services:
+
+- **PostgreSQL:** Database service  
+- **Redis:** Caching service
+
+To start the services, run:
+```bash
+docker-compose up
 ```
 
-To create a production bundle:
+## License
 
-```sh
-npx nx build crm-auth
-```
-
-To see all available targets to run for a project, run:
-
-```sh
-npx nx show project crm-auth
-```
-
-These targets are either [inferred automatically](https://nx.dev/concepts/inferred-tasks?utm_source=nx_project&utm_medium=readme&utm_campaign=nx_projects) or defined in the `project.json` or `package.json` files.
-
-[More about running tasks in the docs &raquo;](https://nx.dev/features/run-tasks?utm_source=nx_project&utm_medium=readme&utm_campaign=nx_projects)
-
-## Add new projects
-
-While you could add new projects to your workspace manually, you might want to leverage [Nx plugins](https://nx.dev/concepts/nx-plugins?utm_source=nx_project&utm_medium=readme&utm_campaign=nx_projects) and their [code generation](https://nx.dev/features/generate-code?utm_source=nx_project&utm_medium=readme&utm_campaign=nx_projects) feature.
-
-Use the plugin's generator to create new projects.
-
-To generate a new application, use:
-
-```sh
-npx nx g @nx/nest:app demo
-```
-
-To generate a new library, use:
-
-```sh
-npx nx g @nx/node:lib mylib
-```
-
-You can use `npx nx list` to get a list of installed plugins. Then, run `npx nx list <plugin-name>` to learn about more specific capabilities of a particular plugin. Alternatively, [install Nx Console](https://nx.dev/getting-started/editor-setup?utm_source=nx_project&utm_medium=readme&utm_campaign=nx_projects) to browse plugins and generators in your IDE.
-
-[Learn more about Nx plugins &raquo;](https://nx.dev/concepts/nx-plugins?utm_source=nx_project&utm_medium=readme&utm_campaign=nx_projects) | [Browse the plugin registry &raquo;](https://nx.dev/plugin-registry?utm_source=nx_project&utm_medium=readme&utm_campaign=nx_projects)
-
-
-[Learn more about Nx on CI](https://nx.dev/ci/intro/ci-with-nx#ready-get-started-with-your-provider?utm_source=nx_project&utm_medium=readme&utm_campaign=nx_projects)
-
-## Install Nx Console
-
-Nx Console is an editor extension that enriches your developer experience. It lets you run tasks, generate code, and improves code autocompletion in your IDE. It is available for VSCode and IntelliJ.
-
-[Install Nx Console &raquo;](https://nx.dev/getting-started/editor-setup?utm_source=nx_project&utm_medium=readme&utm_campaign=nx_projects)
-
-## Useful links
-
-Learn more:
-
-- [Learn more about this workspace setup](https://nx.dev/nx-api/nest?utm_source=nx_project&amp;utm_medium=readme&amp;utm_campaign=nx_projects)
-- [Learn about Nx on CI](https://nx.dev/ci/intro/ci-with-nx?utm_source=nx_project&utm_medium=readme&utm_campaign=nx_projects)
-- [Releasing Packages with Nx release](https://nx.dev/features/manage-releases?utm_source=nx_project&utm_medium=readme&utm_campaign=nx_projects)
-- [What are Nx plugins?](https://nx.dev/concepts/nx-plugins?utm_source=nx_project&utm_medium=readme&utm_campaign=nx_projects)
-
-And join the Nx community:
-- [Discord](https://go.nx.dev/community)
-- [Follow us on X](https://twitter.com/nxdevtools) or [LinkedIn](https://www.linkedin.com/company/nrwl)
-- [Our Youtube channel](https://www.youtube.com/@nxdevtools)
-- [Our blog](https://nx.dev/blog?utm_source=nx_project&utm_medium=readme&utm_campaign=nx_projects)
+This project is licensed under the MIT License.
