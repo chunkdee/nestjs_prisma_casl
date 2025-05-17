@@ -5,6 +5,10 @@ import { UsersModule } from './users/users.module';
 import { PrismaModule } from './prisma/prisma.module';
 import { PrismaService } from './prisma/prisma.service';
 import { OctoCaslModule } from '@my-workspace/octo-casl';
+import { NestCacheModule } from './cache/cache.module';
+import type { Cache } from 'cache-manager';
+import { CACHE_MANAGER } from '@nestjs/cache-manager';
+
 
 @Module({
   imports: [
@@ -19,12 +23,14 @@ import { OctoCaslModule } from '@my-workspace/octo-casl';
         idGenerator: () => crypto.randomUUID(),
       },
     }),
+    NestCacheModule,
     OctoCaslModule.forRootAsync({
-      imports: [ClsModule],
-      inject: [ClsService, PrismaService],
-      useFactory: (cls: ClsService, prisma: PrismaService) => ({
+      imports: [ClsModule, NestCacheModule],
+      inject: [ClsService, PrismaService, CACHE_MANAGER],
+      useFactory: (cls: ClsService, prisma: PrismaService, cacheManager: Cache) => ({
+        cacheManager: cacheManager,
         prismaService: prisma,
-        cls: cls
+        cls: cls,
       }),
     }),
   ],

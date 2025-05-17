@@ -9,7 +9,7 @@ export class UsersController {
   constructor(private readonly usersService: UsersService) {}
 
   @Get()
-  @CheckAbilities({ action: 'Update', subject: 'User' })
+  @CheckAbilities({ action: 'Read', subject: 'User' })
   findAll() {
     return this.usersService.findAll();
   }

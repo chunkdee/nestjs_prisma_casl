@@ -1,12 +1,15 @@
-import { Injectable, UnauthorizedException } from '@nestjs/common';
+import { Inject, Injectable, UnauthorizedException } from '@nestjs/common';
 import { PassportStrategy } from '@nestjs/passport';
 import { Strategy } from 'passport-local';
 import { AuthService } from '../auth.service';
-import { ClsService } from 'nestjs-cls';
+import { CACHE_MANAGER } from '@nestjs/cache-manager';
+import { Cache } from 'cache-manager';
 
 @Injectable()
 export class LocalStrategy extends PassportStrategy(Strategy) {
-  constructor(private authService: AuthService,private cls: ClsService) {
+  constructor(private authService: AuthService,
+             @Inject(CACHE_MANAGER) private cacheManager: Cache
+  ) {
     super({ usernameField: 'email' })
   }
 
@@ -15,10 +18,11 @@ export class LocalStrategy extends PassportStrategy(Strategy) {
     if (!user) {
       throw new UnauthorizedException();
     }
-
-    // Extract user and save in cls
-    this.cls.set('user', user);
-    console.log('Local: Extract user from CLS:', user);
+     //Reset the cache for the user
+        const roleId = user.roleId;
+        const cacheKey = `casl_rules_${roleId}`;
+        await this.cacheManager.del(cacheKey);
+        console.log(`User ${user.email} authenticated, cache invalidated for role (${roleId})`);
 
     return user;
   }

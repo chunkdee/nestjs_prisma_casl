@@ -2,9 +2,11 @@ import { Injectable, UnauthorizedException } from '@nestjs/common';
 import { AuthGuard } from '@nestjs/passport';
 import { ClsService } from 'nestjs-cls';
 
+
 @Injectable()
 export class JwtAuthGuard extends AuthGuard('jwt') {
-  constructor(private cls: ClsService) {
+  constructor(private cls: ClsService
+  ) {
     super();
   }
     handleRequest(err: any, user: any) {
@@ -14,14 +16,12 @@ export class JwtAuthGuard extends AuthGuard('jwt') {
       throw err || new UnauthorizedException();
     }
       //Extract user and save in cls
-        this.cls.set('userId', user.userId);
-        this.cls.set('roleId', user.roleId);
-         this.cls.set('user', user);
-         const reqId = this.cls.getId();
+        this.cls.set('user', user);
       
-        console.log('JWT: Extract reqId from CLS:', reqId);
+     // Log the user object for debugging
         console.log('JWT : cls set up for user ', { user });
-     
+
+
 
     return user;
   }

@@ -28,19 +28,20 @@ export class AbilityGuard implements CanActivate {
       return true;
     }
 
-    // Get the user token object from cls context
+    //get current user from cls (request context)
       const user: User = this.cls.get('user');
-  
+
    //create the ability instance for the user
     const appAbility = await this.abilityFactory.createForUser(user.roleId);
     
     
     // The guard checks ability.can(action, subjectType).
-    // An in-controller check would be ability.can('update', articleInstance).
-
+    // Iterate over the required abilities and check if the user has the required permissions
     for (const requiredAbility of requiredAbilities) {
       const action = requiredAbility.action as AppActions; // Cast to AppActions type
       const subject = requiredAbility.subject as AppSubject; // Cast to AppSubject type
+
+      console.log('Checking ability:', action, subject);
 
       // Check if the user's ability instance allows the required action on the required subject type
      // if (!this.ability.can(action, subject)) {
