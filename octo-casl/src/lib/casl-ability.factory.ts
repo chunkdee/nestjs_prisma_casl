@@ -2,13 +2,12 @@ import { Inject, Injectable } from '@nestjs/common';
 import { Permission, PrismaClient } from '@prisma/client';
 import { createMongoAbility } from '@casl/ability';
 import { AppAbility, AppActions, AppSubject, RawRule } from './types';
-import { PRISMA_CLIENT,CLS_SERVICE } from './casl.constants';
-import { ClsService } from 'nestjs-cls';
+import { PRISMA_CLIENT } from './casl.constants';
 
 @Injectable()
 export class AbilityFactory {
-    constructor(@Inject(PRISMA_CLIENT) private prisma: PrismaClient,
-    @Inject(CLS_SERVICE) private readonly cls: ClsService
+    constructor(@Inject(PRISMA_CLIENT) private prisma: PrismaClient
+
 ) {}
 
 
@@ -22,7 +21,6 @@ export class AbilityFactory {
     async createForUser(roleId : number) : Promise<AppAbility> {
         // 1. Fetch the raw database rows for the user
     
-        console.log('CASL FACTORY: Extract roleId from CLS:', roleId);
         const rawDbRows: Permission[] = await this.prisma.permission.findMany({
             where: {roleId: roleId},
         });

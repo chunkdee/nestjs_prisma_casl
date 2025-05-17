@@ -1,18 +1,15 @@
 import { CanActivate, ExecutionContext, Injectable, ForbiddenException, Inject } from '@nestjs/common';
 import { Reflector } from '@nestjs/core';
-import { Observable } from 'rxjs';
-import { CHECK_ABILITY, RequiredAbility, AppAbility, AppSubject , AppActions} from './types';
-//import { ABILITY_TOKEN } from './casl-ability.provider';
-import { ABILITY_TOKEN,CLS_SERVICE,PRISMA_CLIENT } from './casl.constants'; // Import the token for the ability provider
+import { CHECK_ABILITY, RequiredAbility, AppSubject , AppActions} from './types';
+import { CLS_SERVICE } from './casl.constants'; // Import the token for the ability provider
 import { ClsService } from 'nestjs-cls';
-import { PrismaClient,User} from '@prisma/client';
+import { User} from '@prisma/client';
 import { AbilityFactory } from './casl-ability.factory';
 
 @Injectable()
 export class AbilityGuard implements CanActivate {
   constructor(
     private reflector: Reflector,
-    @Inject(ABILITY_TOKEN) private ability: AppAbility, // Inject the request-scoped ability
     @Inject(CLS_SERVICE) private readonly cls: ClsService,
      private readonly abilityFactory: AbilityFactory, // Inject the ability factor
   ) {}
@@ -31,16 +28,13 @@ export class AbilityGuard implements CanActivate {
       return true;
     }
 
-      const roleId = this.cls.get('roleId');
-      const userId = this.cls.get('user.userId');
+    // Get the user token object from cls context
       const user: User = this.cls.get('user');
   
-      const reqId = this.cls.getId();
-      console.log('CASL: Extract User from CLS:', {roleId}); // Log the user object for debugging
-      console.log('CASL: Extract reqId from reqId:', reqId);
-      console.log('CASL: Extract reqId from userId:', userId);
-
-      const appAbility2 = await this.abilityFactory.createForUser(user.roleId);
+   //create the ability instance for the user
+    const appAbility = await this.abilityFactory.createForUser(user.roleId);
+    
+    
     // The guard checks ability.can(action, subjectType).
     // An in-controller check would be ability.can('update', articleInstance).
 
@@ -50,7 +44,7 @@ export class AbilityGuard implements CanActivate {
 
       // Check if the user's ability instance allows the required action on the required subject type
      // if (!this.ability.can(action, subject)) {
-      if (!appAbility2.can(action, subject)) {
+      if (!appAbility.can(action, subject)) {
         // If any required ability check fails, deny access
         throw new ForbiddenException('You do not have sufficient permissions to access this resource.');
       }
