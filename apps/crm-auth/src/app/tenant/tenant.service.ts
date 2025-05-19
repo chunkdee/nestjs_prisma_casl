@@ -32,7 +32,7 @@ export class TenantService implements OnModuleInit, OnModuleDestroy {
     // Define auto-cache configuration for PrismaExtensionRedis
     const auto: AutoCacheConfig = {
       excludedModels: ['Post'],
-      excludedOperations: ['findFirst', 'findMany'],
+      excludedOperations: [],
       models: [
         {
           model: 'User',
@@ -53,8 +53,8 @@ export class TenantService implements OnModuleInit, OnModuleDestroy {
      onMiss: (key: string) => console.log(`NOT FOUND CACHE: ${key}`),
       type: 'JSON',
       cacheKey: {
-        case: CacheCase.CAMEL_CASE,
-        delimiter: '*',
+        case: CacheCase.SNAKE_CASE,
+        delimiter: ':',
         prefix: 'octocrm',
       },
     };
@@ -137,9 +137,11 @@ export class TenantService implements OnModuleInit, OnModuleDestroy {
    * @throws Error if the tenant context is not found. 
    */ 
   getCurrentTenantId(): string { 
-       const tenantId = this.cls.get('tenantId') as string; 
+       let tenantId = this.cls.get('tenantId') as string; 
        if (!tenantId) { 
-           throw new InternalServerErrorException('Tenant ID not found in CLS context.'); 
+          this.logger.log('currently using default tenanat  tenant1');
+          tenantId = 'tenant1'; 
+          // throw new InternalServerErrorException('Tenant ID not found in CLS context.'); 
        } 
        return tenantId; 
   }

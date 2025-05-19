@@ -10,7 +10,8 @@ export class TenantMiddleware implements NestMiddleware {
     // Extract tenantId from the "x-tenant-id" header (or from query params as a fallback)
     const tenantId = req.headers['x-tenant-id'] || req.query.tenant;
     if (tenantId && typeof tenantId === 'string') {
-      this.cls.set('tenantId', tenantId);
+      this.cls.set('tenantId', tenantId);  
+      
     }
    
     next();
